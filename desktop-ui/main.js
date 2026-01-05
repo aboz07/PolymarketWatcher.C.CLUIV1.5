@@ -1,0 +1,94 @@
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+const { fork } = require('child_process');
+
+let serverProcess = null;
+let mainWindow = null;
+
+function startServer() {
+  // Use tsx to run the TypeScript server file directly
+  const { spawn } = require('child_process');
+  const serverPath = path.join(__dirname, 'server.ts');
+  
+  serverProcess = spawn('npx', ['tsx', serverPath], {
+    cwd: path.join(__dirname, '..'),
+    stdio: 'inherit',
+    shell: true
+  });
+
+  serverProcess.on('error', (err) => {
+    console.error('Failed to start server:', err);
+  });
+
+  serverProcess.on('exit', (code) => {
+    console.log(`Server process exited with code ${code}`);
+  });
+}
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1400,
+    height: 900,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false
+    },
+    title: 'Polymarket Watcher',
+    backgroundColor: '#0f0f0f',
+    show: false // Don't show until ready
+  });
+
+  // Wait a bit for server to start, then load
+  setTimeout(() => {
+    mainWindow.loadURL('http://localhost:3000').catch(err => {
+      console.error('Failed to load URL:', err);
+      // Retry after another second
+      setTimeout(() => {
+        mainWindow.loadURL('http://localhost:3000');
+      }, 1000);
+    });
+  }, 1500);
+
+  // Show window when ready
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
+
+  // Open DevTools in development (optional)
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools();
+  }
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+}
+
+// This method will be called when Electron has finished initialization
+app.whenReady().then(() => {
+  startServer();
+  createWindow();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+// Quit when all windows are closed
+app.on('window-all-closed', () => {
+  if (serverProcess) {
+    serverProcess.kill();
+  }
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('before-quit', () => {
+  if (serverProcess) {
+    serverProcess.kill();
+  }
+});

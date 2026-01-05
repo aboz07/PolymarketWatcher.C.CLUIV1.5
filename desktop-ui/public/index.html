@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymarket Watcher - Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍃 Polymarket Watcher</h1>
+            <div class="status-indicator">
+                <span id="status-dot" class="status-dot"></span>
+                <span id="status-text">Connecting...</span>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Trades</div>
+                <div class="stat-value" id="stat-trades">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Wallets Tracked</div>
+                <div class="stat-value" id="stat-wallets">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Markets Monitored</div>
+                <div class="stat-value" id="stat-markets">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Alerts</div>
+                <div class="stat-value" id="stat-alerts">0</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <section class="trades-section">
+                <div class="tab-header">
+                    <button class="tab-btn active" data-tab="trades">Recent Trades</button>
+                    <button class="tab-btn" data-tab="scanning">Scanning</button>
+                </div>
+                
+                <div id="trades-tab" class="tab-content active">
+                    <div class="controls">
+                        <div class="controls-left">
+                            <button id="start-watcher-btn" class="btn btn-success">Start Scanning</button>
+                            <button id="stop-watcher-btn" class="btn btn-danger" style="display: none;">Stop Scanning</button>
+                            <button id="refresh-btn" class="btn btn-primary">Refresh</button>
+                            <button id="auto-refresh-btn" class="btn btn-toggle active">Auto-refresh (5s)</button>
+                        </div>
+                    </div>
+                    <div id="trades-list" class="trades-list">
+                        <div class="loading">Loading trades...</div>
+                    </div>
+                </div>
+                
+                <div id="scanning-tab" class="tab-content">
+                    <div class="controls">
+                        <div class="controls-left">
+                            <button id="clear-logs-btn" class="btn btn-primary">Clear Logs</button>
+                            <button id="auto-scroll-btn" class="btn btn-toggle active">Auto-scroll</button>
+                        </div>
+                    </div>
+                    <div id="watcher-status" class="watcher-status"></div>
+                    <div id="logs-container" class="logs-container">
+                        <div class="loading">Click "Start Scanning" to begin watching trades...</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="config-section">
+                <h2>Configuration</h2>
+                <div id="config-display" class="config-display">
+                    <div class="loading">Loading configuration...</div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>Last updated: <span id="last-update">Never</span></p>
+        </footer>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
