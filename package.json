@@ -7,12 +7,12 @@
     "dev": "tsx src/index.ts",
     "test:webhook": "tsx src/index.ts --test-webhook",
     "ui": "electron desktop-ui/main.js",
-    "ui:dev": "NODE_ENV=development electron desktop-ui/main.js",
+    "ui:dev": "SET NODE_ENV=development && electron desktop-ui/main.js",
     "ui:test": "node desktop-ui/test-server.js",
     "validate": "node validate-setup.js",
-    "setup": "bash setup.sh",
+    "setup": "node setup.js",
     "diagnose": "node diagnose-server.js",
-    "kill-port": "bash kill-port-3000.sh"
+    "kill-port": "node kill-port.js"
   },
   "dependencies": {
     "axios": "^1.7.9",
