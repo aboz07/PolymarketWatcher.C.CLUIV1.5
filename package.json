@@ -10,7 +10,8 @@
     "ui:dev": "NODE_ENV=development electron desktop-ui/main.js",
     "ui:test": "node desktop-ui/test-server.js",
     "validate": "node validate-setup.js",
-    "setup": "bash setup.sh"
+    "setup": "bash setup.sh",
+    "diagnose": "node diagnose-server.js"
   },
   "dependencies": {
     "axios": "^1.7.9",

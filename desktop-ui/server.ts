@@ -180,3 +180,10 @@ export function startWebServer(port: number = 3000) {
 
   return server;
 }
+
+// Start the server when this file is run directly
+// This is critical - without this, the server never starts!
+if (require.main === module) {
+  console.log("🚀 Starting Polymarket Watcher UI Server...");
+  startWebServer(3000);
+}

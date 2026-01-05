@@ -9,19 +9,30 @@ function startServer() {
   // Use tsx to run the TypeScript server file directly
   const { spawn } = require('child_process');
   const serverPath = path.join(__dirname, 'server.ts');
-  
+  const projectRoot = path.join(__dirname, '..');
+
+  console.log('🚀 Starting UI server...');
+  console.log('   Server script:', serverPath);
+  console.log('   Working directory:', projectRoot);
+
   serverProcess = spawn('npx', ['tsx', serverPath], {
-    cwd: path.join(__dirname, '..'),
+    cwd: projectRoot,
     stdio: 'inherit',
     shell: true
   });
 
   serverProcess.on('error', (err) => {
-    console.error('Failed to start server:', err);
+    console.error('❌ Failed to start server:', err);
+    console.error('   Make sure tsx is installed: npm install tsx');
   });
 
   serverProcess.on('exit', (code) => {
-    console.log(`Server process exited with code ${code}`);
+    if (code === 0) {
+      console.log('ℹ️  Server process exited normally');
+    } else {
+      console.error(`❌ Server process exited with code ${code}`);
+      console.error('   Check if dependencies are installed: npm install');
+    }
   });
 }
 
@@ -41,11 +52,17 @@ function createWindow() {
 
   // Wait a bit for server to start, then load
   setTimeout(() => {
+    console.log('🌐 Connecting to http://localhost:3000...');
     mainWindow.loadURL('http://localhost:3000').catch(err => {
-      console.error('Failed to load URL:', err);
+      console.error('❌ Failed to load URL:', err.message);
+      console.log('⏳ Retrying in 1 second...');
       // Retry after another second
       setTimeout(() => {
-        mainWindow.loadURL('http://localhost:3000');
+        mainWindow.loadURL('http://localhost:3000').catch(err2 => {
+          console.error('❌ Still cannot connect to server');
+          console.error('   The server may not have started properly');
+          console.error('   Try running: npm run ui:test (to test server standalone)');
+        });
       }, 1000);
     });
   }, 1500);

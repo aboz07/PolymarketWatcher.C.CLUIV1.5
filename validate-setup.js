@@ -198,6 +198,19 @@ try {
     warnings++;
   }
 
+  // Check if server.ts actually starts the server (CRITICAL)
+  const serverPath = 'desktop-ui/server.ts';
+  const serverContent = fs.readFileSync(serverPath, 'utf8');
+
+  if (serverContent.includes('if (require.main === module)') &&
+      serverContent.includes('startWebServer')) {
+    log('success', 'Server startup code is present (CRITICAL FIX)');
+  } else {
+    log('error', 'Server startup code is MISSING - server will not start!');
+    log('info', 'This is why you see "404 Not Found" errors');
+    errors++;
+  }
+
 } catch (e) {
   log('error', `Failed to verify code fixes: ${e.message}`);
   errors++;
