@@ -12,7 +12,8 @@
     "validate": "node validate-setup.js",
     "setup": "node setup.js",
     "diagnose": "node diagnose-server.js",
-    "kill-port": "node kill-port.js"
+    "kill-port": "node kill-port.js",
+    "test-server": "node test-server-simple.js"
   },
   "dependencies": {
     "axios": "^1.7.9",
