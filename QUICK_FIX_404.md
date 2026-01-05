@@ -7,11 +7,29 @@ Getting this error when clicking "Start Scanning":
 Failed to start watcher: HTTP 404: Not Found. Make sure the UI server is running
 ```
 
-## The Root Cause
+## Common Root Causes
 
-**The server wasn't starting!**
+### Cause 1: Port 3000 is Already in Use (MOST COMMON)
+
+Another process is using port 3000, so the Polymarket Watcher server can't start.
+
+**Quick fix:**
+```bash
+npm run kill-port
+```
+
+**See detailed guide:** [FIX_PORT_IN_USE.md](FIX_PORT_IN_USE.md)
+
+### Cause 2: Server Code Missing
 
 The `desktop-ui/server.ts` file defined the server but never called the function to start it.
+
+**Quick fix:**
+```bash
+git pull  # Get latest code with fix
+```
+
+---
 
 ## The Fix (3 Steps)
 
@@ -82,12 +100,14 @@ npm run ui
 
 ## Other Common Issues
 
-### Issue: "tsx not installed"
+### Issue: "Port 3000 already in use" ⚠️ MOST COMMON
+
+**Quick fix:**
 ```bash
-npm install
+npm run kill-port
 ```
 
-### Issue: "Port 3000 already in use"
+**Manual method:**
 ```bash
 # macOS/Linux
 lsof -i :3000
@@ -96,6 +116,13 @@ kill -9 <PID>
 # Windows
 netstat -ano | findstr :3000
 taskkill /PID <PID> /F
+```
+
+**See:** [FIX_PORT_IN_USE.md](FIX_PORT_IN_USE.md) for complete guide.
+
+### Issue: "tsx not installed"
+```bash
+npm install
 ```
 
 ### Issue: "Missing .env file"

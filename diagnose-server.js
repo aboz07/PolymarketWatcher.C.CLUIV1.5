@@ -64,8 +64,26 @@ const testServer = http.createServer();
 testServer.once('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     log('error', 'Port 3000 is already in use');
-    log('info', 'Kill the process using port 3000 or use a different port');
-    log('info', 'Find process: lsof -i :3000 (macOS/Linux) or netstat -ano | findstr :3000 (Windows)');
+    console.log('');
+    log('warning', 'This is likely why you are getting 404 errors!');
+    console.log('');
+    console.log('The UI is connecting to the wrong server on port 3000.');
+    console.log('You need to free up port 3000 for the Polymarket Watcher server.');
+    console.log('');
+    console.log(`${colors.green}Quick fix:${colors.reset}`);
+    console.log('  npm run kill-port     # Automated - finds and kills process');
+    console.log('');
+    console.log(`${colors.yellow}Manual method:${colors.reset}`);
+    console.log('  # Find the process:');
+    console.log('  lsof -i :3000                    (macOS/Linux)');
+    console.log('  netstat -ano | findstr :3000     (Windows)');
+    console.log('');
+    console.log('  # Kill it:');
+    console.log('  kill -9 <PID>                    (macOS/Linux)');
+    console.log('  taskkill /PID <PID> /F           (Windows)');
+    console.log('');
+    console.log('Then run this diagnostic again: npm run diagnose');
+    console.log('');
     process.exit(1);
   }
 });
